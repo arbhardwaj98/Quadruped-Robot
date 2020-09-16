@@ -1,6 +1,6 @@
 # Quadruped-Robot
 
-A Low Cost Quadruped Robot with Autonomous Capabilities
+### A Low Cost Quadruped Robot with Autonomous Capabilities
 
 The aim was to develop a low cost quadruped robot so that it has the capability to traverse autonomously on irregular terrains:
 
