@@ -27,3 +27,6 @@ Tested using Gazebo based physics simulation for the robot, to validate the equa
 4) Hardware Drivers
 5) Matlab Codes for Trajectory Generation
 6) CAD Files
+
+
+Find more information about the robot [here](https://drive.google.com/file/d/16AhPm6JRH62gSZBvzB-JlDFh6qmGrHIq/view?usp=sharing).
