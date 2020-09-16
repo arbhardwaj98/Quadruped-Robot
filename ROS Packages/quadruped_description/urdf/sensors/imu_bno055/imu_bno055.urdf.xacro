@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="imu_bno055">
+
+	<xacro:include filename="$(find quadruped_description)/urdf/sensors/imu_bno055/imu_bno055.gazebo.xacro"/>
+	
+	<xacro:macro name="imu_bno055" params="name parent *origin">
+	
+		<xacro:property name="thickness" value="0.006"/>
+	  <xacro:property name="frame_width" value="0.018"/>
+	  <xacro:property name="frame_length" value="0.025"/>
+	
+		<link name="${name}_link">
+			<inertial>
+			  <origin rpy="0 0 0" xyz="0 0 0"/>
+			  <mass value="0.01"/>
+			  <inertia ixx="1e-6"
+			           ixy="0.0"
+			           ixz="0.0"
+			           iyy="1e-6"
+			           iyz="0.0"
+			           izz="0.00003"/>
+			</inertial>
+			<collision>
+			  <origin rpy="0 0 0" xyz="0 0 0"/>
+			  <geometry>
+			    <box size="${frame_length} ${frame_width} ${thickness}"/>
+			  </geometry>
+			</collision>
+			<visual>
+			  <origin rpy="0 0 0" xyz="0 0 0"/>
+			  <geometry>
+			    <box size="${frame_length} ${frame_width} ${thickness}"/>
+			  </geometry>
+			</visual>
+		</link>
+		
+		
+		<joint name="${name}_link_joint" type="fixed">
+		  <xacro:insert_block name="origin" />
+		  <parent link="${parent}"/>
+		  <child link="${name}_link"/>
+		</joint>
+		
+		<xacro:imu_bno055_gazebo name="${name}" />
+	
+	</xacro:macro>
+
+</robot>

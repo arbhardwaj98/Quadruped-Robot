@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="base_frame_link_gazebo">
+	
+	<xacro:macro name="quadruped_base_gazebo" params="name">
+		
+		<gazebo reference="${name}_plate">
+			<material>Gazebo/LightBlueLaser</material>
+		</gazebo>
+		
+		<gazebo>
+			<plugin name="p3d_base_pose" filename="libgazebo_ros_p3d.so">
+				<robotNamespace>/quadruped</robotNamespace>
+				<updateRate>10.0</updateRate>
+				<bodyName>${name}_link</bodyName>
+				<topicName>base_pose_ground_truth</topicName>
+				<frameName>world</frameName>
+			</plugin>
+			
+			<!--plugin name="planar_move_plugin" filename="libgazebo_ros_planar_move.so">
+				<robotNamespace>/quadruped</robotNamespace>
+				<commandTopic>planar_move/cmd_vel</commandTopic>
+				<odometryTopic>planar_move/odom</odometryTopic>
+				<odometryFrame>planar_move_odom</odometryFrame>
+				<odometryRate>10.0</odometryRate>
+				<robotBaseFrame>${name}_link</robotBaseFrame>
+			</plugin-->
+		</gazebo>
+		
+	</xacro:macro>
+
+</robot>

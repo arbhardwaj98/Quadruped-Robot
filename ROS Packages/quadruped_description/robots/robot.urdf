@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="quadruped_robot">
+
+  <xacro:property name="base_name" value="base"/>
+  <xacro:property name="thickness" value="0.0254"/>
+  <xacro:property name="frame_width" value="0.35"/>
+  <xacro:property name="frame_length" value="0.60"/>
+
+  <xacro:include filename="$(find quadruped_description)/urdf/single_leg/single_leg.urdf.xacro"/>
+  <xacro:include filename="$(find quadruped_description)/urdf/base/base.urdf.xacro"/>
+  <xacro:include filename="$(find quadruped_description)/urdf/sensors/hokuyo_laser/hokuyo_laser.urdf.xacro"/>
+  <xacro:include filename="$(find quadruped_description)/urdf/sensors/realsense_d435/realsense_d435.urdf.xacro"/>
+  <xacro:include filename="$(find quadruped_description)/urdf/sensors/realsense_d435/realsense_d435_dummy.urdf.xacro" />
+  <xacro:include filename="$(find quadruped_description)/urdf/sensors/imu_bno055/imu_bno055.urdf.xacro"/>
+  <xacro:include filename="$(find quadruped_description)/robots/robot.gazebo.xacro"/>
+  
+  <!-- Base xacro -->
+  <xacro:quadruped_base name="${base_name}"/>
+  
+  <!-- Leg xacro -->
+  <xacro:single_leg suffix="leg1" parent="${base_name}" reflect1="1.0" reflect2="1.0"/>
+  <xacro:single_leg suffix="leg2" parent="${base_name}" reflect1="1.0" reflect2="-1.0"/>
+  <xacro:single_leg suffix="leg3" parent="${base_name}" reflect1="-1.0" reflect2="1.0"/>
+  <xacro:single_leg suffix="leg4" parent="${base_name}" reflect1="-1.0" reflect2="-1.0"/>
+  
+  <!-- Realsense D435 camera xacro -->
+  <xacro:realsense_d435 name="d435" parent="base_link" >
+    <origin xyz="${frame_length/2.0 - 0.03} 0 ${thickness/2.0+0.01}" rpy="0.0 0 0.0" />
+  </xacro:realsense_d435>
+  
+  <!-- Hokuyo Laser Scan xacro -->
+  <xacro:hokuyo_laser name="hokuyo_laser" parent="base_link" >
+    <origin xyz="${frame_length/2.0 - 0.03} 0 -${thickness/2.0+0.02}" rpy="0.0 0 0.0" />
+  </xacro:hokuyo_laser>
+  
+  <!-- Realsense D435 dummy weight balance -->
+  <xacro:realsense_d435_dummy name="d435_dummy" parent="base_link" >
+    <origin xyz="-${frame_length/2.0 - 0.03} 0 ${thickness/2.0+0.01}" rpy="0.0 0 ${pi}" />
+  </xacro:realsense_d435_dummy>
+  
+  <!-- BNO055 IMU xacro -->
+  <xacro:imu_bno055 name="imu" parent="base_link" >
+    <origin xyz="0 0 ${thickness/2.0}" rpy="0.0 0.00 0.0" />
+  </xacro:imu_bno055>
+  
+  <!-- Gazebo ROS Control-->
+  <xacro:gazebo_ros_control_macro ns="/quadruped"/>
+  
+</robot>
+  
+  
+  

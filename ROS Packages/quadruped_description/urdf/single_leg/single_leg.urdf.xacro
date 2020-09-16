@@ -1,0 +1,208 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="single_leg">
+
+	<xacro:property name="crank_length" value="0.2"/>
+	<xacro:property name="coupler_length" value="0.4"/>
+	<xacro:property name="tube_width" value="0.015"/>
+	<xacro:property name="motor_sep" value="0.05"/>
+	<xacro:property name="base_length" value="0.50"/>
+	<xacro:property name="base_width" value="0.35"/>
+	
+	<xacro:include filename="$(find quadruped_description)/urdf/single_leg/single_leg.transmission.xacro"/>
+		
+	<xacro:macro name="single_leg" params="suffix parent reflect1 reflect2">
+		
+		<link name="${suffix}_crank1">
+		  <inertial>
+		    <origin rpy="0 0 0" xyz="${crank_length/2.0} 0 0"/>
+		    <mass value="0.072"/>
+		    <inertia ixx="4.8e-06"
+		             ixy="0.0"
+		             ixz="0.0"
+		             iyy="0.0005424"
+		             iyz="0.0"
+		             izz="0.0005424"/>
+		  </inertial>
+		  <collision>
+		    <origin rpy="0 0 0" xyz="${crank_length/2.0} 0 0"/>
+		    <geometry>
+		      <box size="${crank_length} ${tube_width} ${tube_width}"/>
+		    </geometry>
+		  </collision>
+		  <visual>
+		    <origin rpy="0 0 0" xyz="${crank_length/2.0} 0 0"/>
+		    <geometry>
+		      <box size="${crank_length} ${tube_width} ${tube_width}"/>
+		    </geometry>
+		  </visual>
+		</link>
+		
+		<link name="${suffix}_crank2">
+		  <inertial>
+		    <origin rpy="0 0 0" xyz="${crank_length/2.0} 0 0"/>
+		    <mass value="0.072"/>
+		    <inertia ixx="4.8e-06"
+		             ixy="0.0"
+		             ixz="0.0"
+		             iyy="0.0005424"
+		             iyz="0.0"
+		             izz="0.0005424"/>
+		  </inertial>
+		  <collision>
+		    <origin rpy="0 0 0" xyz="${crank_length/2.0} 0 0"/>
+		    <geometry>
+		      <box size="${crank_length} ${tube_width} ${tube_width}"/>
+		    </geometry>
+		  </collision>
+		  <visual>
+		    <origin rpy="0 0 0" xyz="${crank_length/2.0} 0 0"/>
+		    <geometry>
+		      <box size="${crank_length} ${tube_width} ${tube_width}"/>
+		    </geometry>
+		  </visual>
+		</link>
+		
+		<link name="${suffix}_coupler1">
+		  <inertial>
+		    <origin rpy="0 0 0" xyz="${coupler_length/2.0} 0 0"/>
+		    <mass value="0.144"/>
+		    <inertia ixx="9.6e-06"
+		             ixy="0.0"
+		             ixz="0.0"
+		             iyy="0.0021696"
+		             iyz="0.0"
+		             izz="0.0021696"/>
+		  </inertial>
+		  <collision>
+		    <origin rpy="0 0 0" xyz="${coupler_length/2.0} 0 0"/>
+		    <geometry>
+		      <box size="${coupler_length} ${tube_width} ${tube_width}"/>
+		    </geometry>
+		  </collision>
+		  <visual>
+		    <origin rpy="0 0 0" xyz="${coupler_length/2.0} 0 0"/>
+		    <geometry>
+		      <box size="${coupler_length} ${tube_width} ${tube_width}"/>
+		    </geometry>
+		  </visual>
+		</link>
+		
+		<link name="${suffix}_coupler2">
+		  <inertial>
+		    <origin rpy="0 0 0" xyz="${coupler_length/4.0} 0 0"/>
+		    <mass value="0.072"/>
+		    <inertia ixx="4.8e-06"
+		             ixy="0.0"
+		             ixz="0.0"
+		             iyy="0.0005424"
+		             iyz="0.0"
+		             izz="0.0005424"/>
+		  </inertial>
+		  <collision>
+		    <origin rpy="0 0 0" xyz="${coupler_length/4.0} 0 0"/>
+		    <geometry>
+		      <box size="${coupler_length/2.0} ${tube_width} ${tube_width}"/>
+		    </geometry>
+		  </collision>
+		  <visual>
+		    <origin rpy="0 0 0" xyz="${coupler_length/4.0} 0 0"/>
+		    <geometry>
+		      <box size="${coupler_length/2.0} ${tube_width} ${tube_width}"/>
+		    </geometry>
+		  </visual>
+		</link>
+		
+		<link name="${suffix}_toe_extension">
+		  <inertial>
+		    <origin rpy="0 0 0" xyz="${coupler_length/4.0} 0 0"/>
+		    <mass value="0.072"/>
+		    <inertia ixx="4.8e-06"
+		             ixy="0.0"
+		             ixz="0.0"
+		             iyy="0.0005424"
+		             iyz="0.0"
+		             izz="0.0005424"/>
+		  </inertial>
+		  <collision>
+		    <origin rpy="0 0 0" xyz="${coupler_length/4.0} 0 0"/>
+		    <geometry>
+		      <box size="${coupler_length/2.0} ${tube_width} ${tube_width}"/>
+		    </geometry>
+		  </collision>
+		  <visual>
+		    <origin rpy="0 0 0" xyz="${coupler_length/4.0} 0 0"/>
+		    <geometry>
+		      <box size="${coupler_length/2.0} ${tube_width} ${tube_width}"/>
+		    </geometry>
+		  </visual>
+		</link>
+		
+		
+		<!-- joints -->
+		<joint name="${suffix}_motor_1" type="continuous">
+		  <origin rpy="${pi/2.0} 0 0" xyz="${reflect2*base_length/2.0 + motor_sep/2.0} ${reflect1*(tube_width/2.0 + base_width/2.0)} 0"/>
+		  <parent link="${parent}_link"/>
+		  <child link="${suffix}_crank1"/>
+		  <dynamics damping="1.0" friction="0.4">
+		  	<limit effort="1" velocity="1"  />
+		  </dynamics>
+		  <axis xyz="0 0 1"/>
+		</joint>
+		<joint name="${suffix}_motor_2" type="continuous">
+		  <origin rpy="${pi/2.0} 0 ${pi}" xyz="${reflect2*base_length/2.0 - motor_sep/2.0} ${reflect1*(tube_width/2.0 + base_width/2.0)} 0"/>
+		  <parent link="${parent}_link"/>
+		  <child link="${suffix}_crank2"/>
+		   <dynamics damping="1.0" friction="0.4">
+		  	<limit effort="1" velocity="1"  />
+		  </dynamics>
+		  <axis xyz="0 0 1"/>
+		</joint>
+		<joint name="${suffix}_joint_cc1" type="continuous">
+		  <origin rpy="0 0 -${pi-acos((crank_length+motor_sep/2.0)/coupler_length)}" xyz="${crank_length} 0 0"/>
+		  <parent link="${suffix}_crank1"/>
+		  <child link="${suffix}_coupler1"/>
+		  <axis xyz="0 0 1"/>
+		</joint>
+		<joint name="${suffix}_joint_cc2" type="continuous">
+		  <origin rpy="0 0 ${acos((crank_length+motor_sep/2.0)/coupler_length)-pi}" xyz="${crank_length} 0 0"/>
+		  <parent link="${suffix}_crank2"/>
+		  <child link="${suffix}_coupler2"/>
+		  <axis xyz="0 0 1"/>
+		</joint>
+		<joint name="${suffix}_joint_toe" type="continuous">
+		  <origin rpy="0 0 ${2*asin((crank_length+motor_sep/2.0)/coupler_length)-pi}" xyz="${coupler_length} 0 0"/>
+		  <parent link="${suffix}_coupler1"/>
+		  <child link="${suffix}_toe_extension"/>
+		  <axis xyz="0 0 1"/>
+		</joint>
+		
+		
+		<!-- SDFormat joints -->
+		<gazebo>
+		  <joint name="${suffix}_joint_fixed" type="fixed">
+		    <pose>${coupler_length/2.0} 0 0 0 ${pi} 0</pose>
+		    <parent>${suffix}_coupler2</parent>
+		    <child>${suffix}_toe_extension</child>
+		  </joint>
+		</gazebo>
+		
+		
+		<!-- Gazebo Properties -->
+		<gazebo reference="${suffix}_coupler1">
+    	  <mu1>200</mu1>
+    	  <mu2>100</mu2>
+        </gazebo>
+        <gazebo reference="${suffix}_coupler2">
+    	  <mu1>200</mu1>
+    	  <mu2>100</mu2>
+        </gazebo>
+		<gazebo reference="${suffix}_toe_extension">
+    	  <mu1>200</mu1>
+    	  <mu2>100</mu2>
+        </gazebo>        
+
+		
+		<xacro:single_leg_transmission suffix="${suffix}"/>
+		
+	</xacro:macro>
+</robot>

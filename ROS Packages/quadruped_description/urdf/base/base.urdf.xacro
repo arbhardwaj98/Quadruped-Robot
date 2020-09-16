@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="base_frame_link">
+
+	<xacro:include filename="$(find quadruped_description)/urdf/base/base.gazebo.xacro"/>
+	
+	<xacro:macro name="quadruped_base" params="name">
+	
+		<xacro:property name="thickness" value="0.0254"/>
+	  	<xacro:property name="frame_width" value="0.35"/>
+	  	<xacro:property name="frame_length" value="0.60"/>
+	
+		<link name="${name}_plate">
+			<inertial>
+			  <origin rpy="0 0 0" xyz="0 0 0"/>
+			  <mass value="2.5"/>
+			  <inertia ixx="0.005"
+			           ixy="0.0"
+			           ixz="0.0"
+			           iyy="0.010"
+			           iyz="0.0"
+			           izz="0.0155"/>
+			</inertial>
+			<collision>
+			  <origin rpy="0 0 0" xyz="0 0 0"/>
+			  <geometry>
+			    <box size="${frame_length} ${frame_width} ${thickness}"/>
+			  </geometry>
+			</collision>
+			<visual>
+			  <origin rpy="0 0 0" xyz="0 0 0"/>
+			  <geometry>
+			    <box size="${frame_length} ${frame_width} ${thickness}"/>
+			  </geometry>
+			</visual>
+		</link>
+		
+		<link name="${name}_link"/>
+		
+		<joint name="${name}_plate_joint" type="fixed">
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<parent link="${name}_link"/>
+			<child link="${name}_plate"/>
+  		</joint>
+		
+		<xacro:quadruped_base_gazebo name="${name}"/>
+		
+	</xacro:macro>
+
+</robot>

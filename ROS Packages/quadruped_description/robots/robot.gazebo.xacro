@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="single_leg_transmission">
+	
+	<xacro:macro name="gazebo_ros_control_macro" params="ns">
+	
+		<gazebo>
+  			<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    			<robotNamespace>${ns}</robotNamespace>
+    			<robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    			<legacyModeNS>true</legacyModeNS>
+  			</plugin>
+  			
+		  	<self_collide>true</self_collide>
+		  	
+		</gazebo>
+		
+	</xacro:macro>
+	
+</robot>

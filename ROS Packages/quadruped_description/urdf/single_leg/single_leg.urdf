@@ -1,0 +1,240 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="single_leg">
+
+	<xacro:property name="crank_length" value="0.2"/>
+	<xacro:property name="coupler_length" value="0.4"/>
+	<xacro:property name="tube_width" value="0.015"/>
+	<xacro:property name="motor_sep" value="0.1"/>
+
+  <gazebo>
+    <self_collide>true</self_collide>
+  </gazebo>
+  
+  <link name = "world"/>
+  <link name = "dummy_link"/>
+  
+  <link name="crank1">
+    <inertial>
+      <origin rpy="0 0 0" xyz="${crank_length/2.0} 0 0"/>
+      <mass value="0.072"/>
+      <inertia ixx="4.8e-06"
+               ixy="0.0"
+               ixz="0.0"
+               iyy="0.0005424"
+               iyz="0.0"
+               izz="0.0005424"/>
+    </inertial>
+    <collision>
+      <origin rpy="0 0 0" xyz="${crank_length/2.0} 0 0"/>
+      <geometry>
+        <box size="${crank_length} ${tube_width} ${tube_width}"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="${crank_length/2.0} 0 0"/>
+      <geometry>
+        <box size="${crank_length} ${tube_width} ${tube_width}"/>
+      </geometry>
+    </visual>
+  </link>
+  
+  <link name="crank2">
+    <inertial>
+      <origin rpy="0 0 0" xyz="${crank_length/2.0} 0 0"/>
+      <mass value="0.072"/>
+      <inertia ixx="4.8e-06"
+               ixy="0.0"
+               ixz="0.0"
+               iyy="0.0005424"
+               iyz="0.0"
+               izz="0.0005424"/>
+    </inertial>
+    <collision>
+      <origin rpy="0 0 0" xyz="${crank_length/2.0} 0 0"/>
+      <geometry>
+        <box size="${crank_length} ${tube_width} ${tube_width}"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="${crank_length/2.0} 0 0"/>
+      <geometry>
+        <box size="${crank_length} ${tube_width} ${tube_width}"/>
+      </geometry>
+    </visual>
+  </link>
+  
+  <link name="coupler1">
+    <inertial>
+      <origin rpy="0 0 0" xyz="${coupler_length/2.0} 0 0"/>
+      <mass value="0.144"/>
+      <inertia ixx="9.6e-06"
+               ixy="0.0"
+               ixz="0.0"
+               iyy="0.0021696"
+               iyz="0.0"
+               izz="0.0021696"/>
+    </inertial>
+    <collision>
+      <origin rpy="0 0 0" xyz="${coupler_length/2.0} 0 0"/>
+      <geometry>
+        <box size="${coupler_length} ${tube_width} ${tube_width}"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="${coupler_length/2.0} 0 0"/>
+      <geometry>
+        <box size="${coupler_length} ${tube_width} ${tube_width}"/>
+      </geometry>
+    </visual>
+  </link>
+  
+  <link name="coupler2">
+    <inertial>
+      <origin rpy="0 0 0" xyz="${coupler_length/4.0} 0 0"/>
+      <mass value="0.072"/>
+      <inertia ixx="4.8e-06"
+               ixy="0.0"
+               ixz="0.0"
+               iyy="0.0005424"
+               iyz="0.0"
+               izz="0.0005424"/>
+    </inertial>
+    <collision>
+      <origin rpy="0 0 0" xyz="${coupler_length/4.0} 0 0"/>
+      <geometry>
+        <box size="${coupler_length/2.0} ${tube_width} ${tube_width}"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="${coupler_length/4.0} 0 0"/>
+      <geometry>
+        <box size="${coupler_length/2.0} ${tube_width} ${tube_width}"/>
+      </geometry>
+    </visual>
+  </link>
+  
+  <link name="toe_extension">
+    <inertial>
+      <origin rpy="0 0 0" xyz="${coupler_length/4.0} 0 0"/>
+      <mass value="0.072"/>
+      <inertia ixx="4.8e-06"
+               ixy="0.0"
+               ixz="0.0"
+               iyy="0.0005424"
+               iyz="0.0"
+               izz="0.0005424"/>
+    </inertial>
+    <collision>
+      <origin rpy="0 0 0" xyz="${coupler_length/4.0} 0 0"/>
+      <geometry>
+        <box size="${coupler_length/2.0} ${tube_width} ${tube_width}"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="${coupler_length/4.0} 0 0"/>
+      <geometry>
+        <box size="${coupler_length/2.0} ${tube_width} ${tube_width}"/>
+      </geometry>
+    </visual>
+  </link>
+  
+  
+  
+  <!-- joints -->
+  <joint name="motor_1" type="continuous">
+    <origin rpy="0 0 0" xyz="${motor_sep/2.0} 0 0.1"/>
+    <parent link="world"/>
+    <child link="crank1"/>
+    <dynamics damping="1.0" friction="0.4"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  <joint name="motor_2" type="continuous">
+    <origin rpy="0 0 ${pi}" xyz="${-1*motor_sep/2.0} 0 0.1"/>
+    <parent link="world"/>
+    <child link="crank2"/>
+    <dynamics damping="1.0" friction="0.4"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  <joint name="joint_cc1" type="continuous">
+    <origin rpy="0 0 -${pi-acos((crank_length+motor_sep/2.0)/coupler_length)}" xyz="${crank_length} 0 0"/>
+    <parent link="crank1"/>
+    <child link="coupler1"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  <joint name="joint_cc2" type="continuous">
+    <origin rpy="0 0 ${pi-acos((crank_length+motor_sep/2.0)/coupler_length)}" xyz="${crank_length} 0 0"/>
+    <parent link="crank2"/>
+    <child link="coupler2"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  <joint name="joint_toe" type="continuous">
+    <origin rpy="0 0 ${2*asin((crank_length+motor_sep/2.0)/coupler_length)-pi}" xyz="${coupler_length} 0 0"/>
+    <parent link="coupler1"/>
+    <child link="toe_extension"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  <joint name="joint_dummy" type="fixed">
+    <origin rpy="0 0 ${2*asin((crank_length+motor_sep/2.0)/coupler_length)-pi}" xyz="${coupler_length} 0 0"/>
+    <parent link="coupler1"/>
+    <child link="dummy_link"/>
+  </joint>
+  
+  
+  <!-- SDFormat joints -->
+  <gazebo>
+    <joint name="joint_fixed" type="fixed">
+      <pose>${coupler_length/2.0} 0 0 0 ${pi} 0</pose>
+      <parent>coupler2</parent>
+      <child>toe_extension</child>
+    </joint>
+  </gazebo>
+  
+  
+  
+  <!-- transmission elements -->
+  <transmission name="motor_1_transmission">
+	<type>transmission_interface/SimpleTransmission</type>
+	<joint name="motor_1">
+	  <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+	</joint>
+	<actuator name="motor_1_dynamixel">
+	  <mechanicalReduction>1</mechanicalReduction>
+	  <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+	</actuator>
+  </transmission>
+  
+  <transmission name="motor_2_transmission">
+	<type>transmission_interface/SimpleTransmission</type>
+	<joint name="motor_2">
+	  <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+	</joint>
+	<actuator name="motor_2_dynamixel">
+	  <mechanicalReduction>1</mechanicalReduction>
+	  <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+	</actuator>
+  </transmission>
+  
+  
+  <!-- Control Plugin -->
+  <gazebo>
+  	<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>single_leg</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+      <legacyModeNS>true</legacyModeNS>
+  	</plugin>			
+	<self_collide>true</self_collide>	  	
+  </gazebo>
+  
+  <gazebo>
+    <plugin name="p3d_base_pose" filename="libgazebo_ros_p3d.so">
+	  <robotNamespace>/single_leg</robotNamespace>
+	  <updateRate>10.0</updateRate>
+	  <bodyName>dummy_link</bodyName>
+      <topicName>base_pose_ground_truth</topicName>
+      <frameName>world</frameName>
+	</plugin>
+  </gazebo>
+  
+  
+  
+</robot>

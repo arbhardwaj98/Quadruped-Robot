@@ -1,0 +1,39 @@
+quadruped:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+
+  # Position Controllers ---------------------------------------
+  leg1_motor_1_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: leg1_motor_1
+    pid: {p: 10.0, i: 0.01, d: 1}
+  leg1_motor_2_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: leg1_motor_2
+    pid: {p: 10.0, i: 0.01, d: 1}
+  leg2_motor_1_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: leg2_motor_1
+    pid: {p: 10.0, i: 0.01, d: 1}
+  leg2_motor_2_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: leg2_motor_2
+    pid: {p: 10.0, i: 0.01, d: 1}
+  leg3_motor_1_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: leg3_motor_1
+    pid: {p: 10.0, i: 0.01, d: 1}
+  leg3_motor_2_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: leg3_motor_2
+    pid: {p: 10.0, i: 0.01, d: 1}
+  leg4_motor_1_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: leg4_motor_1
+    pid: {p: 10.0, i: 0.01, d: 1}
+  leg4_motor_2_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: leg4_motor_2
+    pid: {p: 10.0, i: 0.01, d: 1}

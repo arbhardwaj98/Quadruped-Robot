@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+    <launch>
+    <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+    		<arg name="paused" default="false"/>
+    		<arg name="use_sim_time" default="true"/>
+    		<arg name="gui" default="true"/>
+    		<arg name="headless" default="false"/>
+    		<arg name="debug" default="false"/>
+    		<arg name="world_name" default="$(find quadruped_gazebo)/worlds/quadruped_nav.world"/>
+    		<!--arg name="world_name" default="worlds/empty.world"/-->
+
+    		<!-- We resume the logic in empty_world.launch -->
+    		<include file="$(find gazebo_ros)/launch/empty_world.launch">
+    			<arg name="world_name" value="$(arg world_name)" />
+      			<arg name="debug" value="$(arg debug)" />
+      			<arg name="gui" value="$(arg gui)" />
+      			<arg name="paused" value="$(arg paused)"/>
+      			<arg name="use_sim_time" value="$(arg use_sim_time)"/>
+      			<arg name="headless" value="$(arg headless)"/>
+    		</include>
+
+        <arg name="x" default="0.0" />
+        <arg name="y" default="0.0" />
+        <arg name="z" default="1.0" />
+
+        <arg name="urdf_file" default="$(find quadruped_description)/robots/robot.urdf"/>
+        <arg name="robot_name" default="quadruped_robot" />
+
+        <!-- This Version was created due to some errors seen in the V1 that crashed GAzebo or went too slow in spawn -->
+        <!-- Load the URDF into the ROS Parameter Server -->
+        <param name="robot_description" command="xacro --inorder '$(arg urdf_file)'" />
+
+        <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+        args="-urdf -x $(arg x) -y $(arg y) -z $(arg z) -model $(arg robot_name) -param robot_description -robot_namespace /quadruped "/>
+        
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="quadruped_state_publisher">
+          <!--param name="tf_prefix"    value="/quadruped"/-->
+		  <remap from="joint_states" to="quadruped/joint_states" />
+		</node>
+
+    </launch>

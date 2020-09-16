@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<launch>
+
+        <include file="$(find quadruped_gazebo)/launch/spawn_single_leg.launch"/>
+        
+		<include file="$(find quadruped_control)/launch/single_leg_control.launch"/>
+		
+		<node name="controller" pkg="quadruped_driver" type="single_leg_simulation_controller.py" output="screen"/>
+		
+		<node name="teleop_twist" pkg="quadruped_driver" type="teleop_twist_keyboard.py" output="screen"/>
+
+    </launch>
